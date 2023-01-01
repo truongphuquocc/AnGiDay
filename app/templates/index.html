@@ -1,0 +1,27 @@
+
+  {% extends 'base.html' %}
+  {% block index_content %}
+  <div class="row d-flex justify-content-center align-items-center" style="height: 100%;">
+    <div class="card p-3 d-flex justify-content-center">
+      <div class="card-body">
+        <h4>
+          Ăn gì đây
+        </h4>
+        <div class="v-card__text">
+          <span>Trang web dành cho những người luôn phải nghĩ xem ngày mai ăn gì.</span>
+          <p>Cách sử dụng:</p>
+          <ul class="ml-3">
+            <!-- <li>Thêm các món ăn mà bạn ăn được (và nấu được). Bước này chỉ cần làm một lần.</li> -->
+            <li>Sử dụng tính năng <strong>Lấy món ngẫu nhiên</strong> để tạo danh sách món ăn đã có sẵn trong hệ thống.
+            </li>
+            <li>Sử dụng tính năng <strong>Lấy món tuỳ ý</strong> để tạo danh sách món ăn theo ý của bạn.</li>
+            <li>Chức năng <strong>Đăng nhập</strong> chỉ dùng cho Admin.</li>
+          </ul>
+          <p>Đây là một dự án làm bởi Bảo, Dũng, Quốc.</p>
+          <a href="{{url_for('ngaunhien')}}" class="btn btn-primary">Bắt đầu</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  {% endblock %}

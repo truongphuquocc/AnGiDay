@@ -1,0 +1,56 @@
+
+    {% extends 'base.html' %}
+    {% block index_content %}
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Lấy danh sách món ăn ngẫu nhiên</h5>
+                    <form action="{{url_for('ngaunhien')}}" method="POST">
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Món chính</label>
+                            <input type="text" class="form-control" name="slchinh" required
+                                placeholder="Nhập số lượng món chính">
+
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">món phụ</label>
+                            <input type="text" class="form-control" name="slphu" required
+                                placeholder="Nhập số lượng món phụ">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Lấy ngẫu nhiên</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Kết quả</h5>
+                    {% if dsrandom|length == 0 %}
+                    <h6 class="card-subtitle mb-3 text-muted">Chưa có kết quả</h6>
+                    {% endif %}
+                    <div class="row">
+                        {% for dsrd in dsrandom %}
+
+                        <div class="col-6">
+
+                            <div class="card mb-2">
+                                <div class="card-body">
+                                    <h5 class="card-title mb-3">{{dsrd.tenmon}}</h5>
+                                    {% if 'monchinh' in dsrd.maloai %}
+                                    <h6 class="card-subtitle mb-3 text-muted">Món chính</h6>
+                                    {%else%}
+                                    <h6 class="card-subtitle mb-3 text-muted">Món phụ</h6>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endblock %}

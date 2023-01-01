@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+{% block index_content %}
+
+{% with messages = get_flashed_messages() %} {% if messages %}
+{% for item in messages %}
+<div class="alert alert-danger alert-dismissible">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong>Error!</strong> {{item}}
+</div>
+{% endfor %}
+{% endif %} {% endwith %}
+<div class="row">
+    <div class="col-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Thêm món</h5>
+                <form action="{{url_for('insertclient')}}" method="POST">
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">Tên món</label>
+                        <input type="text" name="tenmon" required class="form-control" id="recipient-name">
+                    </div>
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input type="radio" class="form-check-input" required value="monchinh" name="mm">Món
+                            chính
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input type="radio" required class="form-check-input" value="monphu" name="mm">Món phụ
+                    </div>
+                    <button type="submit" class="btn btn-primary">Thêm món</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Lấy danh sách món ăn ngẫu nhiên</h5>
+                <form action="{{url_for('randomclient')}}" method="POST">
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Món chính</label>
+                        <input type="number" value="{{session['slc']}}" class="form-control" name="slchinh" required
+                            placeholder="Nhập số lượng món chính">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputPassword1">món phụ</label>
+                        <input type="number" value="{{session['slp']}}" class="form-control" name="slphu" required
+                            placeholder="Nhập số lượng món phụ">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Lấy ngẫu nhiên</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-6">
+        <div class="card p-3">
+            <h5>Danh sách món ăn</h5>
+            {% if client|length == 0 %}
+            <h6 class="card-subtitle mb-3 text-muted">Chưa có kết quả</h6>
+            {% endif %}
+            <div class="row">
+                {% for item in client %}
+                <div class="col-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title mb-3">{{item.tenmon}}</h5>
+                            {% if 'monchinh' in item.maloai %}
+                            <h6 class="card-subtitle mb-3 text-muted">Món chính</h6>
+                            {%else%}
+                            <h6 class="card-subtitle mb-3 text-muted">Món phụ</h6>
+                            {% endif %}
+                            <!-- <h6 class="card-subtitle mb-3 text-muted">Món phụ</h6> -->
+                            <a href="/deleteclient/{{item.tenmon}}/{{item.maloai}}" class="btn btn-danger">
+                                Xoá
+                            </a>
+                        </div>
+                        <div class="modal" id="flipFlop" tabindex="-1" role="dialog" aria-labelledby="modalLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-sm" role="document">
+                                <div class="modal-content" style="width: 500px;">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Thêm món</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form action="{{url_for('update')}}" method="post">
+                                            <input type="hidden" class="form-control" id="recipient-name" name="id"
+                                                value="">
+                                            <div class="form-group">
+                                                <label for="recipient-name" class="col-form-label">Tên
+                                                    món</label>
+                                                <input type="text" class="form-control" id="recipient-name"
+                                                    name="tenmon" value="">
+                                            </div>
+
+                                            <div class="form-check">
+                                                <label class="form-check-label">
+                                                    <input type="radio" class="form-check-input" value="monchinh"
+                                                        name="mm">Món
+                                                    chính
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <label class="form-check-label">
+                                                    <input type="radio" class="form-check-input" value="monphu"
+                                                        name="mm">Món phụ
+                                            </div>
+
+                                            <button type="submit" class="btn btn-success">Lưu lại</button>
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-dismiss="modal">Đóng</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Kết quả</h5>
+                {% if dsrandom|length == 0 %}
+                <h6 class="card-subtitle mb-3 text-muted">Chưa có kết quả</h6>
+                {% endif %}
+                <div class="row">
+                    {% for item in dsrandom %}
+                    <div class="col-6">
+                        <div class="card mb-2">
+                            <div class="card-body">
+                                <h5 class="card-title mb-3">{{item.tenmon}}</h5>
+                                {% if 'monchinh' in item.maloai %}
+                                <h6 class="card-subtitle mb-3 text-muted">Món chính</h6>
+                                {%else%}
+                                <h6 class="card-subtitle mb-3 text-muted">Món phụ</h6>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
