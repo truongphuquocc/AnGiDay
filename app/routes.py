@@ -8,6 +8,7 @@ from flask import request, session
 from werkzeug.urls import url_parse
 import random
 from app import db
+from sqlalchemy import func
 
 
 @app.route('/')
@@ -145,7 +146,7 @@ def insert():
         tenmon = request.form.get('tenmon')
         maloai = request.form.get('mm')
 
-        allmonan = MonAn.query.filter(MonAn.tenmon == tenmon).all()
+        allmonan = MonAn.query.filter(func.lower(MonAn.tenmon) == func.lower(tenmon)).all()
         if len(allmonan) == 0:
             print("Danh sach")
             print(allmonan)
@@ -201,12 +202,12 @@ def insertclient():
 
     for x in client:
         print(x["tenmon"])
-        if x["tenmon"] == tenmon:
+        if x["tenmon"].lower() == tenmon.lower():
             check = 1
             break
     if check == 0 and tenmon is not None:
         client.append(dict)
-    elif tenmon is not None:
+    elif tenmon is not None :
         flash(f"Món ăn bị trùng")
     session["client"] = client
 
